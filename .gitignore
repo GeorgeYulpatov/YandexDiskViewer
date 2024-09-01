@@ -1,4 +1,5 @@
-__pycache__/
+diskviewer/__pycache__/
+yandex_disk_project/__pycache__/
 *.pyc
 *.pyo
 *.sqlite3
