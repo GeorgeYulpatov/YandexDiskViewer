@@ -7,7 +7,7 @@
 1. Клонируйте репозиторий:
 
    ```bash
-   git clone https://github.com/ваше_имя/имя_репозитория.git
+   git clone https://github.com/GeorgeYulpatov/YandexDiskViewer.git
    cd имя_репозитория
 2. Создайте виртуальное окружение и активируйте его:
     ```bash
