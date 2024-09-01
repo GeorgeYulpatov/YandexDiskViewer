@@ -1,0 +1,110 @@
+<!-- diskviewer/templates/diskviewer/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотрщик Яндекс.Диска</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4a4a4a;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function toggleSelectAll(source) {
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = source.checked;
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Просмотрщик Яндекс.Диска</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Просмотреть файлы</button>
+    </form>
+
+    {% if files %}
+        <h2>Файлы и папки</h2>
+        <form method="GET" action="{% url 'download_multiple' %}">
+            <input type="hidden" name="public_key" value="{{ public_key }}">
+            <label>
+                <input type="checkbox" onchange="toggleSelectAll(this)"> Выбрать все файлы
+            </label>
+            <ul>
+                {% for file in files %}
+                    <li>
+                        <input type="checkbox" class="file-checkbox" name="file_paths" value="{{ file.path }}">
+                        {{ file.name }}
+                        {% if file.type == 'file' %}
+                            <a href="{% url 'download' %}?public_key={{ public_key }}&file_path={{ file.path }}">Скачать</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Загрузить выбранные файлы</button>
+        </form>
+    {% endif %}
+</body>
+</html>
